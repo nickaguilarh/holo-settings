@@ -1,0 +1,30 @@
+{
+  "name": "nickaguilarh/holo-settings",
+  "description": "A package that allow entities to have settings stored in table.",
+  "type": "library",
+  "license": "GNU GPLv3",
+  "authors": [
+    {
+      "name": "Nick Aguilar H",
+      "email": "nickaguilarh@gmail.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Holo\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Holo\\Test\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Holo\\HoloServiceProvider"
+      ]
+    }
+  }
+}
