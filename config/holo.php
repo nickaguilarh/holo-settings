@@ -7,6 +7,10 @@
  * @package Holo
  */
 
+use Holo\AllowedSettingValue;
+use Holo\EntitySetting;
+use Holo\Setting;
+
 return [
     /*
      * Cache related settings.
@@ -23,5 +27,11 @@ return [
         'settings_table' => 'settings',
         'entity_settings_table' => 'entity_settings',
         'allowed_setting_values_table' => 'allowed_setting_values'
+    ],
+
+    'models' => [
+        'settings_model' => Setting::class,
+        'entity_settings_model' => EntitySetting::class,
+        'allowed_setting_values_model' => AllowedSettingValue::class
     ]
 ];
