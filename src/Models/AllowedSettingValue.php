@@ -2,6 +2,7 @@
 
 namespace Holo;
 
+use Holo\Relationships\AllowedSettingValueRelationships;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
@@ -35,6 +36,8 @@ use Ramsey\Uuid\Uuid;
  */
 class AllowedSettingValue extends Model
 {
+    use AllowedSettingValueRelationships;
+
     /**
      * Indicates if the IDs are auto-incrementing.
      *
@@ -81,25 +84,5 @@ class AllowedSettingValue extends Model
         static::creating(function (AllowedSettingValue $allowedSettingValue) {
             $allowedSettingValue->uuid = Uuid::uuid4();
         });
-    }
-
-    /**
-     * Retrieves the setting for this allowed value.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function setting()
-    {
-        return $this->belongsTo(config('holo.settings_model', Setting::class));
-    }
-
-    /**
-     * Retrieve the entities with settings that uses this values.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function entitySettings()
-    {
-        return $this->hasMany(config('holo.entity_settings_model', EntitySetting::class));
     }
 }

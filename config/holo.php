@@ -16,7 +16,7 @@ return [
      * Cache related settings.
      */
     'cache' => [
-        'ttl' => 3600,
+        'ttl' => 600,
         'enabled' => true
     ],
     

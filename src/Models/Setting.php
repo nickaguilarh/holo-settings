@@ -4,9 +4,12 @@ namespace Holo;
 
 use Holo\Constraints\ConstraintsContract;
 use Holo\Constraints\SettingsConstraints;
+use Holo\Contracts\CachedModelContract;
 use Holo\Models\ConstraintsAbstract;
+use Holo\Relationships\SettingRelationships;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
+use Symfony\Contracts\Cache\CacheTrait;
 
 /**
  * Holo\Setting
@@ -40,8 +43,10 @@ use Ramsey\Uuid\Uuid;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Holo\AllowedSettingValue[] $allowedValues
  * @property-read \Illuminate\Database\Eloquent\Collection|\Holo\EntitySetting[] $entitySettings
  */
-class Setting extends Model
+class Setting extends Model implements CachedModelContract
 {
+    use SettingRelationships;
+    use Traits\Setting;
 
     /**
      * Indicates if the IDs are auto-incrementing.
@@ -91,25 +96,5 @@ class Setting extends Model
             $this->registerConstraints();
             $this->validateConstraints();
         });
-    }
-
-    /**
-     * Retrieves all the entity with settings that this setting is associated.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function entitySettings()
-    {
-        return $this->hasMany(config('holo.entity_settings_model', EntitySetting::class));
-    }
-
-    /**
-     * Retrieves all the allowed values for this setting.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function allowedValues()
-    {
-        return $this->hasMany(config('holo.allowed_setting_values_model', AllowedSettingValue::class));
     }
 }
