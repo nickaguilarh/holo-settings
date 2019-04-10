@@ -43,7 +43,7 @@ use Symfony\Contracts\Cache\CacheTrait;
  * @property-read \Illuminate\Database\Eloquent\Collection|\Holo\AllowedSettingValue[] $allowedValues
  * @property-read \Illuminate\Database\Eloquent\Collection|\Holo\EntitySetting[] $entitySettings
  */
-class Setting extends Model implements CachedModelContract
+class Setting extends Model
 {
     use SettingRelationships;
     use Traits\Setting;
