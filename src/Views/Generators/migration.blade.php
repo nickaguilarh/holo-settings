@@ -17,8 +17,7 @@ class CreateHoloSetupTables extends Migration
         DB::beginTransaction();
 
         Schema::create('{{$settingsTable}}', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary();
             $table->string('name');
             $table->boolean('constrained')->default(false);
             $table->string('value_type');
@@ -29,9 +28,9 @@ class CreateHoloSetupTables extends Migration
         });
 
         Schema::create('{{$allowedSettingValuesTable}}', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('setting_id')->unsigned();
-            $table->foreign('setting_id')->references('id')->on('{{$settingsTable}}')->onUpdate('cascade');
+            $table->uuid('uuid')->primary();
+            $table->uuid('setting_uuid');
+            $table->foreign('setting_uuid')->references('uuid')->on('{{$settingsTable}}')->onUpdate('cascade');
             $table->string('value');
             $table->string('caption');
             $table->timestamps();
@@ -39,12 +38,13 @@ class CreateHoloSetupTables extends Migration
         });
 
         Schema::create('{{$entitySettingsTable}}', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->uuid('uuid');
+            $table->uuid('uuid')->primary();
             $table->morphs('entity');
-            $table->bigInteger('value_id')->unsigned()->nullable();
-            $table->foreign('value_id')->references('id')->on('{{$allowedSettingValuesTable}}')->onUpdate('cascade');
             $table->string('value')->nullable();
+            $table->uuid('value_uuid')->nullable();
+            $table->foreign('value_uuid')->references('uuid')->on('{{$allowedSettingValuesTable}}')->onUpdate('cascade');
+            $table->uuid('setting_uuid')->nullable();
+            $table->foreign('setting_uuid')->references('uuid')->on('{{$settingsTable}}')->onUpdate('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

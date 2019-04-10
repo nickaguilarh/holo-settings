@@ -2,22 +2,66 @@
 
 namespace Holo;
 
-/**
- * This file is part of Fortress,
- * a role & permission management solution for Laravel.
- * @license MIT
- * @package Holo
- */
-
 use Illuminate\Database\Eloquent\Model;
+use Ramsey\Uuid\Uuid;
 
+/**
+ * Holo\AllowedSettingValue
+ * This file is part of Holo Settings,
+ * a settings solution for Laravel.
+ *
+ * @license MIT
+ * @package Holo Settings
+ * @property string $uuid
+ * @property string $setting_uuid
+ * @property string $value
+ * @property string $caption
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Holo\EntitySetting[] $entitySettings
+ * @property-read \Holo\Setting $setting
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereCaption($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereSettingUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereUuid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue whereValue($value)
+ * @mixin \Eloquent
+ */
 class AllowedSettingValue extends Model
 {
     /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+    /**
      * The database table used by the model.
+     *
      * @var string
      */
     protected $table;
+
+    /**
+     * The primary key for the model.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'uuid';
+
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'string';
 
     /**
      * Creates a new instance of the model.
@@ -30,4 +74,32 @@ class AllowedSettingValue extends Model
         $this->table = config('holo.allowed_setting_values_table', 'allowed_setting_values');
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (AllowedSettingValue $allowedSettingValue) {
+            $allowedSettingValue->uuid = Uuid::uuid4();
+        });
+    }
+
+    /**
+     * Retrieves the setting for this allowed value.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function setting()
+    {
+        return $this->belongsTo(config('holo.settings_model', Setting::class));
+    }
+
+    /**
+     * Retrieve the entities with settings that uses this values.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function entitySettings()
+    {
+        return $this->hasMany(config('holo.entity_settings_model', EntitySetting::class));
+    }
 }
