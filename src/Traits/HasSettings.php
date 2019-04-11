@@ -14,38 +14,12 @@ use Illuminate\Support\Facades\Config;
 
 trait HasSettings
 {
-    public function cachedSettings()
-    {
-        $rolePrimaryKey = $this->primaryKey;
-        $cacheKey = 'settings_for_entity_id_' . $this->$rolePrimaryKey;
-        if (Cache::getStore() instanceof TaggableStore && Config::get('holo.cache.enabled')) {
-            return Cache::tags(Config::get('holo.settings_table'))->remember(
-                $cacheKey,
-                Config::get('holo.cache.ttl', 60),
-                function () {
-                    return $this->settings()->get();
-                }
-            );
-        } else {
-            return $this->settings()->get();
-        }
-    }
-
-    /**
-     * Retrieves all the settings for this model.
-     *
-     * @return MorphMany
-     */
-    public function settings()
-    {
-        return $this->morphMany(EntitySetting::class, 'entity');
-    }
-
     /**
      * @param string $settingName
      * @param $value
      * @param string $type
      *
+     * @return EntitySetting
      * @throws ValueIsNotAllowedException
      */
     public function setSetting(string $settingName, $value, string $type = "string")
@@ -53,30 +27,10 @@ trait HasSettings
         $settingBase = $this->getSettingModel($settingName, $type);
         $this->castValue($type, $value);
         if ($settingBase->constrained) {
-            $this->setConstrainedEntitySetting($settingBase, $value);
+            return $this->setConstrainedEntitySetting($settingBase, $value);
         } else {
-            $this->createEntitySetting($settingBase, $value);
+            return $this->createEntitySetting($settingBase, $value);
         }
-    }
-
-    /**
-     * @param string $settingName
-     * @param null $value
-     * @param string|null $type
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getSetting(string $settingName, $value = null, string $type = null)
-    {
-        $settingBase = $this->getSettingModel($settingName);
-        $entitySettings = $this->cachedSettings();
-        $entitySettings->firstWhere('setting_uuid', $settingBase->uuid);
-        if (!$type) {
-            $setting = $this->castValue($type, $value);
-        } else {
-            $setting = $this->castValue($settingBase->value_type, $value);
-        }
-        return $setting;
     }
 
     /**
@@ -90,10 +44,17 @@ trait HasSettings
         $settingBase = \Holo\Setting::whereName($settingName)
             ->firstOrCreate([
                 'name' => $settingName,
+            ], [
                 'constrained' => false,
                 'value_type' => $type,
             ]);
         return $settingBase;
+    }
+
+    private function castValue($type, $value)
+    {
+        settype($value, $type);
+        return $value;
     }
 
     /**
@@ -125,15 +86,58 @@ trait HasSettings
         if ($value instanceof AllowedSettingValue) {
             $entitySetting->constrainedValue()->associate($value);
             $entitySetting->value = $value->value;
+        } else {
+            $entitySetting->value = $value;
         }
-        $entitySetting->value = $entitySetting->value ?? $value;
         $entitySetting->save();
         return $entitySetting;
     }
 
-    private function castValue($type, $value)
+    /**
+     * Retrieves all the settings for this model.
+     *
+     * @return MorphMany
+     */
+    public function settings()
     {
-        settype($value, $type);
-        return $value;
+        return $this->morphMany(EntitySetting::class, 'entity');
+    }
+
+    /**
+     * @param string $settingName
+     * @param null $value
+     * @param string|null $type
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function getSetting(string $settingName, $value = null, string $type = null)
+    {
+        $settingBase = $this->getSettingModel($settingName);
+        $entitySettings = $this->cachedSettings();
+        $setting = $entitySettings->firstWhere('setting_uuid', $settingBase->uuid);
+        $setting = $setting ? $setting->value : $value;
+        if (!is_null($type)) {
+            $setting = $this->castValue($type, $setting);
+        } else {
+            $setting = $this->castValue($settingBase->value_type, $setting);
+        }
+        return $setting;
+    }
+
+    public function cachedSettings()
+    {
+        $rolePrimaryKey = $this->primaryKey;
+        $cacheKey = 'settings_for_entity_id_' . $this->$rolePrimaryKey;
+        if (Cache::getStore() instanceof TaggableStore && Config::get('holo.cache.enabled')) {
+            return Cache::tags(Config::get('holo.settings_table'))->remember(
+                $cacheKey,
+                Config::get('holo.cache.ttl', 60),
+                function () {
+                    return $this->settings()->get();
+                }
+            );
+        } else {
+            return $this->settings()->get();
+        }
     }
 }

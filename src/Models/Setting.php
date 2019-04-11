@@ -9,7 +9,6 @@ use Holo\Models\ConstraintsAbstract;
 use Holo\Relationships\SettingRelationships;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
-use Symfony\Contracts\Cache\CacheTrait;
 
 /**
  * Holo\Setting
@@ -76,6 +75,16 @@ class Setting extends Model
      */
     protected $keyType = 'string';
 
+    /*
+     * Defines the properties that should be mass assignable.
+     *
+     * @var string
+     */
+    protected $fillable = [
+        'name',
+        'value_type'
+    ];
+
     /**
      * Creates a new instance of the model.
      *
@@ -93,8 +102,6 @@ class Setting extends Model
 
         static::creating(function (Setting $setting) {
             $setting->uuid = Uuid::uuid4();
-            $this->registerConstraints();
-            $this->validateConstraints();
         });
     }
 }

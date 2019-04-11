@@ -18,7 +18,7 @@ class CreateHoloSetupTables extends Migration
 
         Schema::create('{{$settingsTable}}', function (Blueprint $table) {
             $table->uuid('uuid')->primary();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->boolean('constrained')->default(false);
             $table->string('value_type');
             $table->double('min_value')->nullable();

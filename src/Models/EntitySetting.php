@@ -81,6 +81,15 @@ class EntitySetting extends Model
         'setting'
     ];
 
+    /*
+  * Defines the properties that should be mass assignable.
+  *
+  * @var string
+  */
+    protected $fillable = [
+        'setting_uuid',
+    ];
+
     /**
      * Creates a new instance of the model.
      *
