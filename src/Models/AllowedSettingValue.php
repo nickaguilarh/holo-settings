@@ -3,6 +3,7 @@
 namespace Holo;
 
 use Holo\Relationships\AllowedSettingValueRelationships;
+use Holo\Traits\AllowedSetting;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
@@ -37,6 +38,7 @@ use Ramsey\Uuid\Uuid;
 class AllowedSettingValue extends Model
 {
     use AllowedSettingValueRelationships;
+    use AllowedSetting;
 
     /**
      * Indicates if the IDs are auto-incrementing.

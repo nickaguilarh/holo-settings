@@ -8,7 +8,7 @@ use Illuminate\Cache\TaggableStore;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
-trait Setting
+trait AllowedSetting
 {
     public function cachedSettings()
     {

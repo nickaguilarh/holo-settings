@@ -2,8 +2,12 @@
 
 namespace Holo;
 
+use Eloquent;
 use Holo\Relationships\EntitySettingRelationships;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -19,29 +23,30 @@ use Ramsey\Uuid\Uuid;
  * @property string|null $value
  * @property string|null $value_uuid
  * @property string|null $setting_uuid
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null $deleted_at
- * @property-read \Holo\AllowedSettingValue $constrainedValue
- * @property-read \Illuminate\Database\Eloquent\Collection|EntitySetting[] $entity
- * @property-read \Holo\Setting|null $setting
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting query()
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereEntityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereEntityType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereSettingUuid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereUuid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereValue($value)
- * @method static \Illuminate\Database\Eloquent\Builder|EntitySetting whereValueUuid($value)
- * @mixin \Eloquent
+ * @property-read AllowedSettingValue $constrainedValue
+ * @property-read Collection|EntitySetting[] $entity
+ * @property-read Setting|null $setting
+ * @method static Builder|EntitySetting newModelQuery()
+ * @method static Builder|EntitySetting newQuery()
+ * @method static Builder|EntitySetting query()
+ * @method static Builder|EntitySetting whereCreatedAt($value)
+ * @method static Builder|EntitySetting whereDeletedAt($value)
+ * @method static Builder|EntitySetting whereEntityId($value)
+ * @method static Builder|EntitySetting whereEntityType($value)
+ * @method static Builder|EntitySetting whereSettingUuid($value)
+ * @method static Builder|EntitySetting whereUpdatedAt($value)
+ * @method static Builder|EntitySetting whereUuid($value)
+ * @method static Builder|EntitySetting whereValue($value)
+ * @method static Builder|EntitySetting whereValueUuid($value)
+ * @mixin Eloquent
  */
 class EntitySetting extends Model
 {
     use EntitySettingRelationships;
+    use Traits\EntitySetting;
 
     /**
      * The database table used by the model.
