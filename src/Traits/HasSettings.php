@@ -44,10 +44,14 @@ trait HasSettings
         $settingBase = \Holo\Setting::whereName($settingName)
             ->firstOrCreate([
                 'name' => $settingName,
-                'value_type' => $type,
             ], [
+                'value_type' => $type,
                 'constrained' => false,
             ]);
+        $settingBase->value_type = $type;
+        if ($settingBase->isDirty()) {
+            $settingBase->save();
+        }
         return $settingBase;
     }
 
