@@ -112,7 +112,7 @@ trait HasSettings
      */
     public function getSetting(string $settingName, $value = null, string $type = null)
     {
-        $settingBase = $this->getSettingModel($settingName, $type);
+        $settingBase = $this->getSettingModel($settingName);
         $entitySettings = $this->cachedSettings();
         $setting = $entitySettings->firstWhere('setting_uuid', $settingBase->uuid);
         $setting = $setting ? $setting->value : $value;
