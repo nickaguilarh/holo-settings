@@ -41,17 +41,28 @@ trait HasSettings
      */
     private function getSettingModel($settingName, $type = 'string')
     {
-        $settingBase = \Holo\Setting::whereName($settingName)
-            ->firstOrCreate([
-                'name' => $settingName,
-            ], [
-                'value_type' => $type,
-                'constrained' => false,
-            ]);
-        $settingBase->value_type = $type;
-        if ($settingBase->isDirty()) {
-            $settingBase->save();
+        $settingBase = \Holo\Setting::whereName($settingName)->first();
+
+        if ($settingBase) {
+            if ($type) {
+                $settingBase->value_type = $type;
+                if ($settingBase->isDirty()) {
+                    $settingBase->save();
+                }
+            }
+        } else {
+            if (!$type) {
+                $type = 'string';
+            }
+            $settingBase = \Holo\Setting::create(
+                [
+                    'name' => $settingName,
+                    'value_type' => $type,
+                    'constrained' => false,
+                ]
+            );
         }
+
         return $settingBase;
     }
 
