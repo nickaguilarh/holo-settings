@@ -44,9 +44,9 @@ trait HasSettings
         $settingBase = \Holo\Setting::whereName($settingName)
             ->firstOrCreate([
                 'name' => $settingName,
+                'value_type' => $type,
             ], [
                 'constrained' => false,
-                'value_type' => $type,
             ]);
         return $settingBase;
     }
@@ -112,16 +112,20 @@ trait HasSettings
      */
     public function getSetting(string $settingName, $value = null, string $type = null)
     {
-        $settingBase = $this->getSettingModel($settingName);
+        $settingBase = $this->getSettingModel($settingName, $type);
         $entitySettings = $this->cachedSettings();
         $setting = $entitySettings->firstWhere('setting_uuid', $settingBase->uuid);
         $setting = $setting ? $setting->value : $value;
         if (!is_null($type)) {
-            $setting = $this->castValue($type, $setting);
+            $castedValue = $this->castValue($type, $setting);
         } else {
-            $setting = $this->castValue($settingBase->value_type, $setting);
+            $castedValue = $this->castValue($settingBase->value_type, $setting);
         }
-        return $setting;
+
+        if (!$setting) {
+            return null;
+        }
+        return $castedValue;
     }
 
     public function cachedSettings()
