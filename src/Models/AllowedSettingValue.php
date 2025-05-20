@@ -1,6 +1,6 @@
 <?php
 
-namespace Holo;
+namespace Holo\Models;
 
 use Holo\Relationships\AllowedSettingValueRelationships;
 use Holo\Traits\AllowedSetting;

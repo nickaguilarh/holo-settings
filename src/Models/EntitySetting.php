@@ -1,6 +1,6 @@
 <?php
 
-namespace Holo;
+namespace Holo\Models;
 
 use Eloquent;
 use Holo\Relationships\EntitySettingRelationships;

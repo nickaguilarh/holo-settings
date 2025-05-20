@@ -2,6 +2,7 @@
 
 namespace Holo;
 
+use Holo\Commands\MigrationCommand;
 use Illuminate\Support\ServiceProvider;
 
 class HoloServiceProvider extends ServiceProvider

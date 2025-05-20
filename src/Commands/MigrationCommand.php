@@ -1,6 +1,6 @@
 <?php
 
-namespace Holo;
+namespace Holo\Commands;
 
 use Illuminate\Console\Command;
 

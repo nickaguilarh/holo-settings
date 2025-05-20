@@ -1,6 +1,6 @@
 <?php
 
-namespace Holo;
+namespace Holo\Models;
 
 use Holo\Constraints\ConstraintsContract;
 use Holo\Constraints\SettingsConstraints;
