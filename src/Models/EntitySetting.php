@@ -2,7 +2,6 @@
 
 namespace Holo\Models;
 
-use Eloquent;
 use Holo\Relationships\EntitySettingRelationships;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -41,12 +40,12 @@ use Ramsey\Uuid\Uuid;
  * @method static Builder|EntitySetting whereUuid($value)
  * @method static Builder|EntitySetting whereValue($value)
  * @method static Builder|EntitySetting whereValueUuid($value)
- * @mixin Eloquent
+ * @mixin Model
  */
 class EntitySetting extends Model
 {
     use EntitySettingRelationships;
-    use Traits\EntitySetting;
+    use \Holo\Traits\EntitySetting;
 
     /**
      * The database table used by the model.

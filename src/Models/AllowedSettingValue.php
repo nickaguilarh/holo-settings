@@ -22,7 +22,7 @@ use Ramsey\Uuid\Uuid;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property string|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\Holo\EntitySetting[] $entitySettings
- * @property-read \Holo\Setting $setting
+ * @property-read \Holo\Models\Setting $setting
  * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|AllowedSettingValue query()

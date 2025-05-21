@@ -36,17 +36,17 @@ trait HasSettings
      * @param $settingName
      * @param string $type
      *
-     * @return \Holo\Setting|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
+     * @return \Holo\Models\Setting|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Model
      */
     private function getSettingModel($settingName, ?string $type = null)
     {
-        $settingBase = \Holo\Setting::whereName($settingName)->first();
+        $settingBase = \Holo\Models\Setting::whereName($settingName)->first();
 
         if (!$settingBase) {
             if (!$type) {
                 $type = 'string';
             }
-            $settingBase = \Holo\Setting::create(
+            $settingBase = \Holo\Models\Setting::create(
                 [
                     'name' => $settingName,
                     'value_type' => $type,
@@ -65,13 +65,13 @@ trait HasSettings
     }
 
     /**
-     * @param \Holo\Setting $setting
+     * @param \Holo\Models\Setting $setting
      * @param $value
      *
      * @return EntitySetting
      * @throws ValueIsNotAllowedException
      */
-    private function setConstrainedEntitySetting(\Holo\Setting $setting, $value)
+    private function setConstrainedEntitySetting(\Holo\Models\Setting $setting, $value)
     {
         if (!$setting->allowedValues()->whereValue($value)->exists()) {
             throw new ValueIsNotAllowedException(
@@ -85,7 +85,7 @@ trait HasSettings
         }
     }
 
-    private function setEntitySetting(\Holo\Setting $setting, $value)
+    private function setEntitySetting(\Holo\Models\Setting $setting, $value)
     {
         /** @var EntitySetting $entitySetting */
         $entitySetting = $this->settings()->firstOrNew(['setting_uuid' => $setting->uuid]);

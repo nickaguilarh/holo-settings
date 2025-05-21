@@ -4,8 +4,8 @@
 namespace Holo\Relationships;
 
 
-use Holo\EntitySetting;
-use Holo\Setting;
+use Holo\Models\EntitySetting;
+use Holo\Models\Setting;
 
 trait AllowedSettingValueRelationships
 {

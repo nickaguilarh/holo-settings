@@ -2,10 +2,6 @@
 
 namespace Holo\Models;
 
-use Holo\Constraints\ConstraintsContract;
-use Holo\Constraints\SettingsConstraints;
-use Holo\Contracts\CachedModelContract;
-use Holo\Models\ConstraintsAbstract;
 use Holo\Relationships\SettingRelationships;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
@@ -45,7 +41,7 @@ use Ramsey\Uuid\Uuid;
 class Setting extends Model
 {
     use SettingRelationships;
-    use Traits\Setting;
+    use \Holo\Traits\Setting;
 
     /**
      * Indicates if the IDs are auto-incrementing.
