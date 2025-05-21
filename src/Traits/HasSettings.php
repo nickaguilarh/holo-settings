@@ -4,8 +4,8 @@
 namespace Holo\Traits;
 
 
-use Holo\AllowedSettingValue;
-use Holo\EntitySetting;
+use Holo\Models\AllowedSettingValue;
+use Holo\Models\EntitySetting;
 use Holo\Exceptions\ValueIsNotAllowedException;
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
